@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fffce9">
+  <title>아빠! 행운의 편지 왔어요!</title>
+  <meta name="description" content="아빠를 위한 특별한 초대장이 도착했어요.">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Jua&display=swap');
+    :root { --ink:#1e2429; --blue:#ffd95a; --blue-dark:#efb92f; --paper:#fffefa; --cream:#fffce9; --pink:#ff7583; --green:#42b768; --yellow:#ffd84e; }
+    * { box-sizing:border-box; }
+    html,body { min-height:100%; margin:0; }
+    body { overflow:hidden; background:var(--cream); color:var(--ink); font-family:'Jua','Apple SD Gothic Neo',sans-serif; }
+    button { font:inherit; }
+    .stage { position:relative; display:grid; place-items:center; width:100%; min-height:100svh; padding:28px 18px max(24px,env(safe-area-inset-bottom)); overflow:hidden; isolation:isolate; }
+    .blob { position:absolute; border-radius:50%; filter:blur(1px); opacity:.42; z-index:-2; }
+    .blob.one { width:180px;height:180px;background:#cfe9ff;left:-65px;top:-40px; }
+    .blob.two { width:160px;height:160px;background:#fff0a8;right:-55px;bottom:-35px; }
+    .sparkles { position:absolute; inset:0; pointer-events:none; z-index:5; }
+    .spark { position:absolute; color:var(--yellow); font-size:clamp(20px,6vw,34px); opacity:0; filter:drop-shadow(0 2px 0 #222); }
+    .opened .spark { animation:pop 1.8s ease-out forwards; }
+    .spark:nth-child(1){left:9%;top:17%;animation-delay:.15s}.spark:nth-child(2){right:10%;top:23%;animation-delay:.35s}.spark:nth-child(3){left:16%;bottom:18%;animation-delay:.55s}.spark:nth-child(4){right:14%;bottom:13%;animation-delay:.75s}
+    .intro { width:min(100%,520px); text-align:center; transition:opacity .55s ease, transform .55s ease; }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; margin-bottom:10px; padding:7px 14px; border:2px solid var(--ink); border-radius:999px; background:#fff; box-shadow:3px 3px 0 var(--ink); font:700 1rem 'Gaegu',sans-serif; }
+    h1 { margin:0 0 28px; font-size:clamp(2rem,8vw,3.4rem); line-height:1.14; letter-spacing:-.04em; }
+    .envelope-button { position:relative; display:block; width:min(84vw,390px); height:min(56vw,260px); margin:auto; padding:0; border:0; background:transparent; cursor:pointer; perspective:1100px; -webkit-tap-highlight-color:transparent; }
+    .envelope-button:focus-visible { outline:5px solid #ffd84e; outline-offset:10px; border-radius:24px; }
+    .envelope { position:absolute; inset:0; border:4px solid var(--ink); border-radius:18px; background:var(--blue); box-shadow:9px 12px 0 rgba(30,36,41,.16); overflow:visible; transform:rotate(-1deg); transition:transform .45s ease; }
+    .envelope-button:hover .envelope { transform:rotate(1deg) translateY(-4px); }
+    .flap { position:absolute; z-index:4; top:-2px; left:-2px; width:calc(100% + 4px); height:58%; background:var(--blue-dark); border:4px solid var(--ink); border-radius:16px 16px 8px 8px; clip-path:polygon(0 0,100% 0,50% 100%); transform-origin:top; transition:transform .85s cubic-bezier(.4,0,.2,1), z-index 0s .4s; }
+    .pocket { position:absolute; z-index:3; inset:0; border-radius:14px; overflow:hidden; background:linear-gradient(145deg,transparent 49%,#6fa8e8 50%) left/50% 100% no-repeat,linear-gradient(215deg,transparent 49%,#6fa8e8 50%) right/50% 100% no-repeat,var(--blue); }
+    .pocket::after { content:""; position:absolute; inset:23% -8% -30%; background:var(--blue); border:4px solid var(--ink); transform:rotate(45deg); }
+    .seal { position:absolute; z-index:6; left:50%; top:45%; width:65px; height:58px; transform:translate(-50%,-50%); filter:drop-shadow(2px 3px 0 var(--ink)); transition:opacity .25s ease, transform .4s ease; }
+    .seal::before,.seal::after { content:""; position:absolute; width:34px;height:54px;border-radius:30px 30px 0 0;background:var(--pink); }
+    .seal::before{left:31px;transform:rotate(-45deg);transform-origin:0 100%}.seal::after{left:0;transform:rotate(45deg);transform-origin:100% 100%}
+    .tap { margin:24px 0 0; font:700 clamp(1.15rem,5vw,1.45rem) 'Gaegu',sans-serif; }
+    .tap span { display:inline-block; margin-right:6px; }
+    .invite { position:absolute; z-index:2; width:min(calc(100% - 28px),480px); max-height:calc(100svh - 34px); padding:26px 22px 22px; border:3px solid var(--ink); border-radius:24px; background:var(--paper); box-shadow:8px 10px 0 rgba(30,36,41,.15); text-align:center; opacity:0; transform:translateY(72vh) rotate(1deg); overflow:auto; pointer-events:none; transition:opacity .35s ease .6s, transform 1.05s cubic-bezier(.2,.85,.25,1) .55s; }
+    .invite::before { content:""; display:block; width:62px;height:6px;margin:0 auto 15px;border-radius:10px;background:linear-gradient(90deg,var(--blue) 0 33%,var(--yellow) 33% 66%,var(--pink) 66%); }
+    .invite h2 { margin:0 0 14px; font-size:clamp(1.65rem,7vw,2.35rem); line-height:1.16; color:#234d7d; }
+    .class-tag { display:inline-block; margin-bottom:15px; padding:6px 13px; border-radius:999px; background:#eaf5ff; color:#285d95; font:700 1rem 'Gaegu',sans-serif; }
+    .message { margin:0 auto 18px; font:700 clamp(1.14rem,4.7vw,1.42rem)/1.62 'Gaegu',sans-serif; }
+    .line { display:block; opacity:0; transform:translateY(10px); }
+    .details { display:grid; gap:9px; margin-top:15px; text-align:left; }
+    .detail { display:grid; grid-template-columns:38px 1fr; align-items:center; gap:8px; padding:10px 12px; border:2px solid var(--ink); border-radius:15px; background:#fff; opacity:0; transform:translateY(10px); box-shadow:3px 3px 0 var(--ink); }
+    .detail:nth-child(2){background:#f5fbff}.detail:nth-child(3){background:#fffbe1}
+    .icon { display:grid; place-items:center; width:31px;height:31px;border-radius:10px;background:#e2f7e9;font-size:19px; }
+    .label { display:block; color:#4c5962; font:700 .83rem 'Gaegu',sans-serif; }
+    .value { font-size:clamp(.98rem,3.8vw,1.12rem); line-height:1.3; }
+    .replay { margin-top:17px; padding:8px 14px; border:0; background:transparent; color:#6a7780; font:700 .95rem 'Gaegu',sans-serif; cursor:pointer; }
+    .music-toggle { position:fixed; z-index:20; right:16px; bottom:max(16px,env(safe-area-inset-bottom)); display:grid; place-items:center; width:48px; height:48px; padding:0; border:2px solid var(--ink); border-radius:50%; background:#fff; box-shadow:3px 4px 0 var(--ink); font-size:22px; cursor:pointer; opacity:0; transform:translateY(14px); pointer-events:none; transition:opacity .35s ease 1s,transform .35s ease 1s; }
+    .music-toggle:focus-visible { outline:4px solid var(--yellow); outline-offset:4px; }
+    .opened .intro { opacity:0; transform:scale(.94); pointer-events:none; }
+    .opened .flap { transform:rotateX(180deg); z-index:1; }
+    .opened .seal { opacity:0; transform:translate(-50%,-70%) scale(.4); }
+    .opened .invite { opacity:1; transform:translateY(0) rotate(0); pointer-events:auto; }
+    .opened .music-toggle { opacity:1; transform:translateY(0); pointer-events:auto; }
+    .opened .line,.opened .detail { animation:reveal .5s ease forwards; }
+    .opened .line:nth-child(1){animation-delay:1.45s}.opened .line:nth-child(2){animation-delay:1.85s}.opened .line:nth-child(3){animation-delay:2.25s}.opened .line:nth-child(4){animation-delay:2.65s}.opened .line:nth-child(5){animation-delay:3.05s}
+    .opened .detail:nth-child(1){animation-delay:3.55s}.opened .detail:nth-child(2){animation-delay:3.85s}.opened .detail:nth-child(3){animation-delay:4.15s}
+    @keyframes reveal{to{opacity:1;transform:translateY(0)}} @keyframes pop{0%{opacity:0;transform:scale(.2) rotate(0)}35%{opacity:1;transform:scale(1.2) rotate(20deg)}100%{opacity:0;transform:scale(.7) rotate(45deg)}}
+    @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important}.line,.detail{opacity:1!important;transform:none!important}}
+  </style>
+</head>
+<body>
+  <main class="stage" id="stage">
+    <div class="blob one"></div><div class="blob two"></div>
+    <div class="sparkles" aria-hidden="true"><span class="spark">✦</span><span class="spark">✦</span><span class="spark">✿</span><span class="spark">★</span></div>
+    <section class="intro" aria-labelledby="title">
+      <div class="eyebrow" id="classTagIntro">★ Yellow Star Class</div>
+      <h1 id="title">아빠!<br>행운의 편지 왔어요!</h1>
+      <button class="envelope-button" id="openButton" aria-label="행운의 편지 열기">
+        <span class="envelope" aria-hidden="true"><span class="flap"></span><span class="pocket"></span><span class="seal"></span></span>
+      </button>
+      <p class="tap"><span>👆</span> 편지를 눌러 보세요!</p>
+    </section>
+    <article class="invite" id="invite" aria-hidden="true">
+      <div class="class-tag" id="classTagCard">★ Yellow Star Class</div>
+      <h2>아빠를 초대합니다! 💌</h2>
+      <p class="message">
+        <span class="line">이 편지를 받은 아빠는</span>
+        <span class="line">다시 자녀의 나이로 돌아가</span>
+        <span class="line">아이와 함께</span>
+        <span class="line">“특별한 하루”를</span>
+        <span class="line">보내게 됩니다.</span>
+      </p>
+      <div class="details">
+        <div class="detail"><span class="icon">🍀</span><span><span class="label">행운이 이루어지는 날</span><span class="value" id="eventDate">2026년 9월 19일</span></span></div>
+        <div class="detail"><span class="icon">⏰</span><span><span class="label">행운의 시간</span><span class="value" id="eventTime">10시 15분 ~ 12시 30분</span></span></div>
+        <div class="detail"><span class="icon">👕</span><span><span class="label">행운의 컬러</span><span class="value">청바지와 흰색 티셔츠 + <span id="colourItem">Yellow</span> 아이템</span></span></div>
+      </div>
+      <button class="replay" id="replayButton">↻ 편지 다시 보기</button>
+    </article>
+    <button class="music-toggle" id="musicToggle" aria-label="배경 음악 끄기" title="배경 음악 끄기">🔊</button>
+  </main>
+  <script>
+    /* ============================================================
+       EDIT EACH CLASS HERE — you only need to change these values.
+       Copy this file, rename it, then edit the details below.
+       ============================================================ */
+    const invitation = {
+      className: 'Gold Sun Class',
+      classIcon: '★',
+      classColour: 'Gold',
+      envelopeColour: '#ffd95a',
+      envelopeDarkColour: '#efb92f',
+      date: '2026년 9월 19일',
+      time: '9시 45분 ~ 11시 50분',
+      musicFile: 'background-music.mp3',
+      musicVolume: 0.22
+    };
+    /* ======================= END OF EDITS ======================= */
+
+    const stage=document.getElementById('stage'), invite=document.getElementById('invite');
+    const musicToggle=document.getElementById('musicToggle');
+    const backgroundMusic=new Audio(invitation.musicFile);
+    backgroundMusic.loop=true;
+    backgroundMusic.preload='auto';
+    backgroundMusic.volume=0;
+    document.documentElement.style.setProperty('--blue',invitation.envelopeColour);
+    document.documentElement.style.setProperty('--blue-dark',invitation.envelopeDarkColour);
+    document.getElementById('classTagIntro').textContent=`${invitation.classIcon} ${invitation.className}`;
+    document.getElementById('classTagCard').textContent=`${invitation.classIcon} ${invitation.className}`;
+    document.getElementById('eventDate').textContent=invitation.date;
+    document.getElementById('eventTime').textContent=invitation.time;
+    document.getElementById('colourItem').textContent=invitation.classColour;
+    function melody(){
+      const AudioCtx=window.AudioContext||window.webkitAudioContext;if(!AudioCtx)return;
+      const ctx=new AudioCtx(), notes=[523.25,659.25,783.99,1046.5,783.99,880,1046.5];
+      notes.forEach((f,i)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,ctx.currentTime+i*.13);g.gain.exponentialRampToValueAtTime(.14,ctx.currentTime+i*.13+.025);g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+i*.13+.24);o.connect(g).connect(ctx.destination);o.start(ctx.currentTime+i*.13);o.stop(ctx.currentTime+i*.13+.26)});
+      setTimeout(()=>ctx.close(),1600);
+    }
+    document.getElementById('openButton').addEventListener('click',()=>{
+      stage.classList.add('opened');
+      invite.setAttribute('aria-hidden','false');
+      melody();
+      backgroundMusic.play().catch(()=>{});
+      setTimeout(()=>{
+        const fade=setInterval(()=>{
+          backgroundMusic.volume=Math.min(invitation.musicVolume,backgroundMusic.volume+0.02);
+          if(backgroundMusic.volume>=invitation.musicVolume)clearInterval(fade);
+        },70);
+      },700);
+      setTimeout(()=>invite.focus({preventScroll:true}),900);
+    });
+    musicToggle.addEventListener('click',()=>{
+      backgroundMusic.muted=!backgroundMusic.muted;
+      musicToggle.textContent=backgroundMusic.muted?'🔇':'🔊';
+      musicToggle.setAttribute('aria-label',backgroundMusic.muted?'배경 음악 켜기':'배경 음악 끄기');
+      musicToggle.title=backgroundMusic.muted?'배경 음악 켜기':'배경 음악 끄기';
+    });
+    document.getElementById('replayButton').addEventListener('click',()=>{
+      stage.classList.remove('opened');
+      invite.setAttribute('aria-hidden','true');
+      backgroundMusic.pause();
+      backgroundMusic.currentTime=0;
+      backgroundMusic.volume=0;
+    });
+  </script>
+</body>
+</html>
